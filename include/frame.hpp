@@ -36,13 +36,19 @@ const std::vector<std::string> CLASSES = {"N/A", "biker", "car", "pedestrian", "
 
 class Obs {
 	private:
+		int _class;
 		cv::Rect_<float> _bbox;
 		Vec2d _center;
 		Vec3d _depth3d;
 	public:
-		Obs(cv::Rect_<float> __bbox, Vec2d __center, Vec3d __depth3d) : _bbox(__bbox), _center(__center), _depth3d(__depth3d);
-		double compare(Obs _obs) { return (_center - _obs.center()).squaredNorm();};
+		Obs(int class, cv::Rect_<float> __bbox, Vec2d __center, Vec3d __depth3d) : _bbox(__bbox), _center(__center), _depth3d(__depth3d);
+		
+		int class() {return _class;};
+		cv::Rect_<float> bbox() {return _bbox;};
 		Vec2d center() {return _center;};
+		Vec3d depth3d() {return _depth3d;};
+
+		double compare(Obs _obs) { return (_center - _obs.center()).squaredNorm();};
 
 };
 
@@ -80,6 +86,9 @@ class Frame {
 		std::unordered_map<int, int> pts_idx_i;
 
 		int obstacles_count() {return int(_obstacles.size());};
+		vec_Obs obstacles() {return _obstacles;};
+		vec_Obs::iterator obstacles_it() {return _obstacles.begin();};
+		vec_Obs::iterator obstacles_end() {return _obstacles.end();};
 
 		bool is_cuda() {return _is_cuda;};
 		bool is_kf() {return _is_kf;};
@@ -147,5 +156,6 @@ class FramePair {
 		void disparity(const cv::Mat &, const cv::Mat &, Map &, const cv::Mat &, const cv::Mat &, Log *);
 		void disparity(const cv::cuda::GpuMat &, const cv::cuda::GpuMat &, Map &, const cv::Mat &, const cv::Mat &, Log *);
 		bool stereoDepth(const cv::KeyPoint &, const Mat3d &, Vec3d &);
+		bool match_obstacles();
 };
 

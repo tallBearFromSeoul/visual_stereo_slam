@@ -1,0 +1,56 @@
+
+
+
+Time : Night Mar 31 ~ Apr 01 2022 {
+	- TODO : Find out the reason of different ORB matchings from cpu to gpu;
+		(AROUND 650 matches from cpu but around 200 from gpu);
+	= Decided to use non-cuda descriptor brute force matcher (knnmatch)
+	= Now has a stable result
+	- TODO : Find good way to perform sgbm;
+	= Just used cuda sgm
+}
+
+Time : Afternoon Apr 04 2022 {
+	- TODO : SPLIT stereo vslam into cuda version and mac version
+	- DONE
+	- TODO : USE KEYFRAMES THAT WILL BE USED FOR GLOBAL OPTIMIZATION
+	- DONE : REPLACED the original 20 frames length of sliding window sub global optimization by global optimization of key frames
+	- "  " : -> ACTUALLY using both SLIDING WINDOW on both local frames and global key frames
+	- TODO : CHANGE KEYFRAME AND KEYFRAMEPTS storings from shared_ptr to weak_ptr 
+	- DONE : CHANGED all key frame and key frameptr storings to weak_ptr and changed all recurring functions
+
+	- TODO : ADAPT the newest visual_stereo_slam_demo_2_mac to visual_stereo_slam_demo_2
+
+	- TODO : REFINE display class and member functions
+
+	- TODO : MAYBE try to make multiple displays
+
+	- TODO : TRY SIMULATING MPC by predicting like 10 steps into the future by using the car model
+
+	- TODO : ADD DETR OBJECT DETECTION, WHEN DETECTED MASK THE AREA THEN EXCLUDE KPS FROM THAT AREA
+}
+
+Time : Afternoon Apr 05 2022 {
+	- DONE PRIOR :
+		Adapted detr to c++ (mistake was in preprocessing)
+	- TODO : CLEAN the detr python code
+	- TODO : REFINE display class and member functions
+	- TODO : MAYBE try to make multiple displays
+	
+	- TODO : PREPARE loading bboxes into extracting features and spawning in display.
+						MAYBE use masking for extracting features
+						BUT still need to estimate how close the car is.
+						NEED to think about this (maybe all we need to do is scaling)
+
+	- TODO : WRITE functions in template so that I can adapt both GpuMat and Mat
+	- TODO : CLEAN print functions
+	- ALMOST DONE 
+	- TODO : CHANGE creating g2o::SparseOptimizer everytime
+						just make it such that the new vertices and edges are added each time
+}
+
+Time : Afternoon Apr 18 2022 : First day of work for project in US {
+	- TODO : FINISH estimating the location of the car : Main edits are in frame.cpp 
+	- TODO : Render the car
+	- DONE : Git repository is online keep adding new files for the project (ONLY finished files will be uploaded)
+}

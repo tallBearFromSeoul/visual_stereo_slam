@@ -10,6 +10,20 @@
 using namespace std::chrono;
 using namespace torch::indexing;
 
+bool FramePair::match_obstacles() {
+	for (vec_Obs::iterator it = left->obstacles_it(); it != left->obstacles_end(); ) {
+		cv::Rect_<float> bbox = it->bbox().area();
+		int class_id = it->class();
+		cv::Rect_<float> bbox = it->bbox();
+		Vec2d center = it->center();
+		Vec3d depth3d = it->depth3d();
+		std::cout<<"class id : "<<class_id<<"\n";
+		std::cout<<"bbox : "<<bbox<<"\n";
+		std::cout<<"center : "<<center<<"\n";
+		std::cout<<"depth3d : "<<depth3d <<"\n";
+	}
+}
+
 torch::Tensor Frame::preprocess(const cv::Mat &_img) {
 	torch::Tensor img_tensor = torch::from_blob(_img.data, {_img.rows, _img.cols, 3});//, options);
 	
@@ -39,7 +53,7 @@ void Frame::detect_obstacles(const cv::Mat &_img, cv::Mat &_mask, torch::jit::sc
 	torch::Tensor pred_boxes = output.at("pred_boxes").toTensorList()[0];
 	
 	for (int i=0; i<scores.sizes()[0]; i++) {
-		long c = pred_classes.index({i}).item<long>();
+		int c = pred_classes.index({i}).item<long>();
 		torch::Tensor box = pred_boxes.index({i, Slice()});
 		float x1, x2, c_x, _x, y1, y2, c_y, _y;
 		x1 = box[0].item<float>();
@@ -71,7 +85,7 @@ void Frame::detect_obstacles(const cv::Mat &_img, cv::Mat &_mask, torch::jit::sc
 		Vec3d depth3d = getPose().inverse().block(0,0,3,4)*_rel_depth_homo;
 		std::cout<<"3d loc xyz : detect_obstacles : "<<depth3d<<"\n";
 		Vec2d center(c_x, c_y);
-		Obs obs(bbox, center, depth3d);
+		Obs obs(c, bbox, center, depth3d);
 		_obstacles.push_back(obs);
 
 		_mask(bbox) = 0;
@@ -89,7 +103,10 @@ FramePair::FramePair(const cv::cuda::GpuMat &_imgL_cuda, const cv::cuda::GpuMat 
 	_sgm_cuda = _map.sgm_cuda;
 	
 	std::cout<<"# of obstacles : [LEFT] "<<left->obstacles_count()<<"\t[RIGHT] "<<right->obstacles_count()<<"\n";
-
+	if (!match_obstacles()) {
+		std::cerr<<"match obstacle results false\n";
+		assert(false);
+	}
 	// if the area of rectangles are similar and the obstacles count are the same if not more problems 
 }
 
