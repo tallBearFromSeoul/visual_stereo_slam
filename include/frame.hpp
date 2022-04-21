@@ -72,10 +72,9 @@ class Frame {
 		//cv::Ptr<cv::cuda::ORB> _fdetector_cuda;
 		//cv::Ptr<cv::cuda::DescriptorMatcher> _fmatcher_cuda;
 
-		torch::Tensor preprocess(const cv::Mat &_img);
-		void detect_obstacles(const cv::Mat &, cv::Mat &, torch::jit::script::Module &);
+		torch::Tensor preprocess_image(const cv::Mat &_img);
+		void detect_obstacles(const std::vector<torch::jit::IValue> &_inputs, torch::jit::script::Module &_module, cv::Mat &, const cv::Mat &);
 		void extract_features(const cv::Mat &_img, const cv::Mat &_mask);
-		void extract_features(const cv::cuda::GpuMat &_img);
 		void anms(const int n);
 		void normalize_kps(const Mat3d& _K_inv);
 
@@ -106,7 +105,6 @@ class Frame {
 		Frame(const cv::cuda::GpuMat &_img, const Mat3d &_K_inv, const Map &);
 
 		//KDTree* tree;
-		
 		MatXd kpus_mat;
 		MatXd kps_mat;
 		cv::Mat desc;

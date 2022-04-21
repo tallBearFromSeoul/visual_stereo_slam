@@ -24,7 +24,7 @@ bool FramePair::match_obstacles() {
 	}
 }
 
-torch::Tensor Frame::preprocess(const cv::Mat &_img) {
+torch::Tensor Frame::preprocess_image(const cv::Mat &_img) {
 	torch::Tensor img_tensor = torch::from_blob(_img.data, {_img.rows, _img.cols, 3});//, options);
 	
 	img_tensor = img_tensor.permute({2,0,1});
@@ -37,12 +37,68 @@ torch::Tensor Frame::preprocess(const cv::Mat &_img) {
 	return img_tensor.clone();
 }
 
+void Frame::detect_obstacles(const std::vector<torch::jit::IValue> &_inputs, torch::jit::script::Module &_module, cv::Mat &_mask, const cv::Mat &_img=cv::noArray()) {
+	bool img_filled = true;
+	if (_img.empty())
+		no_img = false;
+	c10::Dict outputs = _module.forward(_inputs).toGenericDict();
+	torch::Tensor scores = outputs.at("scores").toTensorList()[0];
+	torch::Tensor pred_classes = outputs.at("pred_classes").toTensorList()[0];
+	torch::Tensor pred_boxes = outputs.at("pred_boxes").toTensorList()[0];
+	
+	for (int i=0; i<scores.sizes()[0]; i++) {
+		int c = pred_classes.index({i}).item<long>();
+		torch::Tensor box = pred_boxes.index({i, Slice()});
+		float x1, x2, c_x, _x, y1, y2, c_y, _y;
+		x1 = box[0].item<float>();
+		y1 = box[1].item<float>();
+		x2 = box[2].item<float>();
+		y2 = box[3].item<float>();
+		x1 = x1 < 0 ? 0 : x1;
+		y1 = y1 < 0 ? 0 : y1;
+		x2 = x2-x1 > w ? w-x1 : x2;
+		y2 = y2-y1 > h ? h-y1 : y2;
+		cv::Rect_<float> bbox(x1, y1, x2-x1, y2-y1);
+
+		c_x = x2-(x2-x1)/2;
+		c_y = y2-(y2-y1)/2;
+		std::cout<<"c_x , c_y : "<<c_x<<" , "<<c_y<<"\n";
+		float val, _depth;
+		val = _disparity.at<float>(c_x, c_y);
+		_x = (c_x - _K(6)) / _K(0);
+		_y = (c_y - _K(7)) / _K(0);
+		_depth = K(0) / val;
+		std::cout<<"depth : detect_obstacles : "<<_depth<<"\n";
+		if (_depth < 0) {
+			std::cerr<<"detect_obstacles assertion failure\n";
+			assert(false);
+		}
+		Vec4d _res;
+		_rel_depth_homo << _x*_depth, _y*_depth, _depth, 1.0;
+		Vec3d depth3d = getPose().inverse().block(0,0,3,4)*_rel_depth_homo;
+		std::cout<<"3d loc xyz : detect_obstacles : "<<depth3d<<"\n";
+		Vec2d center(c_x, c_y);
+		Obs obs(c, bbox, center, depth3d);
+		_obstacles.push_back(obs);
+
+		_mask(bbox) = 0;
+		if (img_filled) {
+			cv::rectangle(_img, bbox, cv::Scalar(0,0,255), 2);
+			cv::putText(_img, CLASSES[c], cv::Point(x1, y1), 2, 1.2, cv::Scalar(0,255,0));
+		}
+	}
+	if (img_filled) {
+		cv::imshow("img_clone", _img);
+		cv::waitKey(500);
+	}
+}
+
+/*
 void Frame::detect_obstacles(const cv::Mat &_img, cv::Mat &_mask, torch::jit::script::Module &_module) {
 	cv::Mat _img_clone = _img.clone();
 	torch::Tensor img_tensor = preprocess(_img);
 	img_tensor = img_tensor.to(at::kCUDA);
 	std::vector<torch::Tensor> images = {img_tensor};
-	std::vector<int> img_size = {_img.rows, _img.cols};
 	float w = float(_img.cols);
 	float h = float(_img.rows);
 	std::vector<torch::jit::IValue> inputs = {images, h, w};
@@ -95,10 +151,25 @@ void Frame::detect_obstacles(const cv::Mat &_img, cv::Mat &_mask, torch::jit::sc
 	cv::imshow("img_clone", _img_clone);
 	cv::waitKey(500);
 }
+*/
 
 FramePair::FramePair(const cv::cuda::GpuMat &_imgL_cuda, const cv::cuda::GpuMat &_imgR_cuda, const Map &_map, const cv::Mat &_imgcL, const cv::Mat &_imgcR, torch::jit::script::Module &_module) {
+	left = std::make_shared<Frame>(_imgL_cuda, _map.K_inv, _map, _imgcL);
+	right = std::make_shared<Frame>(_imgR_cuda, _map.K_inv, _map, _imgcR);
+	cv::Mat imgcL_float, imgcR_float, maskL, maskR;
+	_imgcL.convertTo(imgcL_float, CV_32FC3, 1.0f/255.0f);
+	_imgcR.convertTo(imgcR_float, CV_32FC3, 1.0f/255.0f);
+	torch::Tensor img_tensorL = preprocess_image(imgcL_float).to(at::kCUDA);
+	torch::Tensor img_tensorR = preprocess_image(imgcR_float).to(at::kCUDA);
+	std::vector<torch::Tensor> images = {img_tensorL, img_tensorR};
+	std::vector<torch::jit::IValue> inputs = {images, float(imgcL_float.rows), float(imgcR_float.cols)};
+	detect_obstacles(inputs, _module);
+	//TODO: Find out how to deal with the multiple inputs module forward outputs.
+	//TODO: ALSO think about how to deal with masks when multiple inputs
+	/*
 	left = std::make_shared<Frame>(_imgL_cuda, _map.K_inv, _map, _imgcL, _module);
 	right = std::make_shared<Frame>(_imgR_cuda, _map.K_inv, _map, _imgcR, _module);
+	*/
 	lr = {left, right};
 	_sgm_cuda = _map.sgm_cuda;
 	
@@ -111,15 +182,19 @@ FramePair::FramePair(const cv::cuda::GpuMat &_imgL_cuda, const cv::cuda::GpuMat 
 }
 
 Frame::Frame(const cv::cuda::GpuMat &_img_cuda, const Mat3d &_K_inv, const Map &_map, const cv::Mat &_img, torch::jit::script::Module &_module) {
-	cv::Mat _img_float, mask;
+	cv::Mat img_float, mask;
 	mask = cv::Mat::ones(_img.rows, _img.cols, 0);
-	_img.convertTo(_img_float, CV_32FC3, 1.0f/255.0f);
-	
-	time_point<high_resolution_clock> now;
+	_img.convertTo(img_float, CV_32FC3, 1.0f/255.0f);
+	// FIND OUT if converting is necessary
+	time_point<high_resolution_clock> now = high_resolution_clock::now();
 	duration<double> diff;
-	now = high_resolution_clock::now();
-	
-	detect_obstacles(_img_float, mask, _module);
+
+	torch::Tensor img_tensor = preprocess_image(img_float);
+	img_tensor = img_tensor.to(at::kCUDA);
+	// is it faster to do two frames at a time ? 
+	std::vector<torch::Tensor> images = {img_tensor};
+	std::vector<torch::jit::IValue> inputs = {images, float(img_float.rows), float(img_float.cols)};
+	detect_obstacles(inputs, _module, mask, img_float);
 	diff = high_resolution_clock::now() - now;
 	std::cout<<"Time taken for detecting obstacles : "<<diff.count()<<"\n";
 
@@ -133,27 +208,20 @@ Frame::Frame(const cv::cuda::GpuMat &_img_cuda, const Mat3d &_K_inv, const Map &
 	//tree = kdTree();
 }
 
-Frame::Frame(const cv::cuda::GpuMat &_img_cuda, const Mat3d &_K_inv, const Map &_map) {
+Frame::Frame(const cv::cuda::GpuMat &_img_cuda, const Mat3d &_K_inv, const Map &_map, const cv::Mat &_img) {
 	_is_cuda = true;
 	_fdetector = _map.fdetector;
 	//_fdetector_cuda = _map.fdetector_cuda;
 	_fmatcher = _map.fmatcher;
 	//_fmatcher_cuda = (_map.fmatcher_cuda);
-	extract_features(_img_cuda);
+	extract_features(_img, mask);
 	normalize_kps(_K_inv);
 	//tree = kdTree();
 }
 
-void Frame::extract_features(const cv::cuda::GpuMat &_img_cuda) {
-	//_fdetector_cuda->detect(_img, _kps);
-	//anms(1500);
-	//_fdetector_cuda->compute(_img, _kps, desc_cuda);
-	//desc_cuda.download(desc);
-}
-
-FramePair::FramePair(const cv::cuda::GpuMat &_imgL, const cv::cuda::GpuMat &_imgR, const Map &_map) {
-	left = std::make_shared<Frame>(_imgL, _map.K_inv, _map);
-	right = std::make_shared<Frame>(_imgR, _map.K_inv, _map);
+FramePair::FramePair(const cv::cuda::GpuMat &_imgL_cuda, const cv::cuda::GpuMat &_imgR_cuda, const Map &_map) {
+	left = std::make_shared<Frame>(_imgL_cuda, _map.K_inv, _map);
+	right = std::make_shared<Frame>(_imgR_cuda, _map.K_inv, _map);
 	lr = {left, right};
 	_sgm_cuda = _map.sgm_cuda;
 }
