@@ -178,14 +178,6 @@
 # define COMPILER_VERSION_MINOR DEC(__IBMC__/10 % 10)
 # define COMPILER_VERSION_PATCH DEC(__IBMC__    % 10)
 
-#elif defined(__open_xl__) && defined(__clang__)
-# define COMPILER_ID "IBMClang"
-# define COMPILER_VERSION_MAJOR DEC(__open_xl_version__)
-# define COMPILER_VERSION_MINOR DEC(__open_xl_release__)
-# define COMPILER_VERSION_PATCH DEC(__open_xl_modification__)
-# define COMPILER_VERSION_TWEAK DEC(__open_xl_ptf_fix_level__)
-
-
 #elif defined(__ibmxl__) && defined(__clang__)
 # define COMPILER_ID "XLClang"
 # define COMPILER_VERSION_MAJOR DEC(__ibmxl_version__)
@@ -327,24 +319,6 @@
    /* _MSC_VER = VVRR */
 #  define SIMULATE_VERSION_MAJOR DEC(_MSC_VER / 100)
 #  define SIMULATE_VERSION_MINOR DEC(_MSC_VER % 100)
-# endif
-
-#elif defined(__LCC__) && (defined(__GNUC__) || defined(__GNUG__) || defined(__MCST__))
-# define COMPILER_ID "LCC"
-# define COMPILER_VERSION_MAJOR DEC(1)
-# if defined(__LCC__)
-#  define COMPILER_VERSION_MINOR DEC(__LCC__- 100)
-# endif
-# if defined(__LCC_MINOR__)
-#  define COMPILER_VERSION_PATCH DEC(__LCC_MINOR__)
-# endif
-# if defined(__GNUC__) && defined(__GNUC_MINOR__)
-#  define SIMULATE_ID "GNU"
-#  define SIMULATE_VERSION_MAJOR DEC(__GNUC__)
-#  define SIMULATE_VERSION_MINOR DEC(__GNUC_MINOR__)
-#  if defined(__GNUC_PATCHLEVEL__)
-#   define SIMULATE_VERSION_PATCH DEC(__GNUC_PATCHLEVEL__)
-#  endif
 # endif
 
 #elif defined(__GNUC__)
@@ -781,9 +755,10 @@ const char* info_language_standard_default =
   "INFO" ":" "standard_default[" C_VERSION "]";
 
 const char* info_language_extensions_default = "INFO" ":" "extensions_default["
-#if (defined(__clang__) || defined(__GNUC__) || defined(__xlC__) ||           \
+// !defined(_MSC_VER) to exclude Clang's MSVC compatibility mode.
+#if (defined(__clang__) || defined(__GNUC__) ||                               \
      defined(__TI_COMPILER_VERSION__)) &&                                     \
-  !defined(__STRICT_ANSI__)
+  !defined(__STRICT_ANSI__) && !defined(_MSC_VER)
   "ON"
 #else
   "OFF"

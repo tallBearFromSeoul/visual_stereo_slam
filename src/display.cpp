@@ -38,6 +38,44 @@ void Display::DrawPoints(const vec_PointPtr &_vertices) {
 	}
 }
 
+void Display::DrawObstacles(const vec_FramePairPtr &_Fs) {
+	std::vector<Vec3f> obstacles;
+	decode2(_Fs, obstacles);
+	for (const Vec3f &_obs : obstacles) {
+		float x,y,z;
+		x=_obs(0);
+		y=_obs(1);
+		z=_obs(2);
+		glColor3f(150.f,200.f,100.f);
+		glBegin(GL_POINTS);
+		glVertex3f(x, y, z);
+		glEnd();
+		drawCircle(x, y, z);	
+	}
+}
+
+void Display::drawCircle(float _x, float _y, float _z) {
+	float r = 5.0f;
+	glBegin(GL_LINE_LOOP);
+	for (int i=0; i<2; i++) {
+		if (i==1)
+			r = 4.0f;
+		for (int ii=0; ii < 32; ii++) {
+			float theta = 2.0f * 3.1415926f * float(ii) / 32.f;
+			float x = r*cosf(theta);
+			float z = r*sinf(theta);
+			glVertex3f(x+_x, _y, z+_z);
+		}
+		glEnd();
+	}
+}
+
+void Display::decode2(const vec_FramePairPtr &_Fs, std::vector<Vec3f> &_obstacles) {
+	for (const FramePairPtr &_F : _Fs) {
+		_obstacles = _F->corr_m_obs();
+	}
+}
+
 void Display::DrawCamera(const Mat4d &pose, bool draw_ground) {
 	float w = 0.5;
 	float h = 0.3;
@@ -124,16 +162,12 @@ void Display::DrawCameras(const vec_FramePtr &_frames) {
 	glPopMatrix();
 }
 
-void Display::DrawObstacles(const std::vector<cv::Rect_<float>> &) {
-	
-}
-
 void Display::draw_map(const Map& map, DrawType _dt) {
 	vec_FramePtr _vec_frames;
 	vec_PointPtr _vec_points;
 	switch(_dt) {
 		case ALL:
-			run(std::make_pair(map.map_frames, map.map_points));
+			run(std::make_pair(map.map_frames, map.map_points), {map.map_framePairs.back()});
 			break;
 		case KF_ONLY:
 			for (const wFramePtr &_wf : map.map_keyFrames) {
@@ -169,7 +203,7 @@ void Display::draw_map(const Map& map, DrawType _dt) {
 	}
 }
 
-void Display::run(const std::pair<vec_FramePtr, vec_PointPtr> &buf) {
+void Display::run(const std::pair<vec_FramePtr, vec_PointPtr> &buf, const vec_FramePairPtr &_buf2) {
 	double pos_x0 = -x0;
 	double pos_y0 = -y0;
 	double pos_z0 = -z0;
@@ -190,6 +224,7 @@ void Display::run(const std::pair<vec_FramePtr, vec_PointPtr> &buf) {
 						  									0, -1, 0));
 	pangolin::Handler3D handler(s_cam);
 	pangolin::View& d_cam = pangolin::CreateDisplay().SetBounds(0.0, 1.0, 0.0, 1.0, w/h).SetHandler(&handler);
+	
 	if (buf.first.empty() || buf.second.empty())
 		return;
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -199,7 +234,9 @@ void Display::run(const std::pair<vec_FramePtr, vec_PointPtr> &buf) {
 	DrawCameras(buf.first);
 	
 	DrawPoints(buf.second);
-
+	if (_buf2.size()) {
+		DrawObstacles(_buf2);
+	}
 	//vector<BBox> a(1,BBox(4,0));
 	//DrawVehicles(a, buf.first.back());
 

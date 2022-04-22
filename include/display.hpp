@@ -12,6 +12,8 @@ typedef std::shared_ptr<Point> PointPtr;
 typedef std::vector<PointPtr> vec_PointPtr;
 typedef std::shared_ptr<Frame> FramePtr;
 typedef std::vector<FramePtr> vec_FramePtr;
+typedef std::shared_ptr<FramePair> FramePairPtr;
+typedef std::vector<FramePairPtr> vec_FramePairPtr;
 
 class Map;
 
@@ -24,7 +26,7 @@ enum DrawType {
 class Display {
 	private:
 		double x0 = 0;
-		double y0 = 50;
+		double y0 = 150;
 		double z0 = 0.5;
 		double p0 = 800;
 
@@ -34,7 +36,7 @@ class Display {
 		pangolin::OpenGlRenderState s_cam;
 		
 		void setup();
-		void run(const std::pair<vec_FramePtr, vec_PointPtr> &);
+		void run(const std::pair<vec_FramePtr, vec_PointPtr> &, const vec_FramePairPtr &_def={});
 	
 	public:
 		Display();
@@ -42,7 +44,11 @@ class Display {
 		void DrawPoints(const vec_PointPtr &);
 		void DrawCameras(const vec_FramePtr &);
 		void DrawCamera(const Mat4d &, bool);
-		void DrawObstacles(const std::vector<cv::Rect_<float>> &);
+		void DrawObstacles(const std::vector<Vec3f>);
+		void DrawObstacles(const vec_FramePairPtr &);
+		void drawCircle(float, float, float);
+		void decode2(const vec_FramePairPtr &, std::vector<Vec3f> &);
+
 		void draw_map(const Map& map, DrawType);
 };
 

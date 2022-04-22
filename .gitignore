@@ -1,0 +1,5 @@
+*.exe
+*.pt
+*.cmake
+*.txt
+!TODOLISTS.txt

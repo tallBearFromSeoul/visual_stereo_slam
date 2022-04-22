@@ -8,15 +8,15 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/display.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/display.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/display.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/essentialMat.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/essentialMat.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/essentialMat.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/frame.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/frame.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/frame.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/kdTree.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/kdTree.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/kdTree.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/log.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/log.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/log.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/main.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/main.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/main.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/map.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/map.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/map.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/point.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/point.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/point.cpp.o.d"
-  "/Users/gunny7828/Desktop/visual_stereo_slam_demo_6/src/slam.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/slam.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/slam.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/display.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/display.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/display.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/essentialMat.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/essentialMat.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/essentialMat.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/frame.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/frame.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/frame.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/kdTree.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/kdTree.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/kdTree.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/log.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/log.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/log.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/main.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/main.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/main.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/map.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/map.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/map.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/point.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/point.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/point.cpp.o.d"
+  "/home/gunny7828/visual_stereo_slam/src/slam.cpp" "CMakeFiles/vSlamStereo_exe.dir/src/slam.cpp.o" "gcc" "CMakeFiles/vSlamStereo_exe.dir/src/slam.cpp.o.d"
   )
 
 # Targets to which this target links.

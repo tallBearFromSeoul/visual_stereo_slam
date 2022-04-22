@@ -29,7 +29,10 @@ void StereoSLAM::process_frame_cuda(cv::cuda::GpuMat &_imgcL_cuda, cv::cuda::Gpu
 		F1->setPoseIdentity();
 		if (F1->right_empty())
 			F1->setRightPose();
-		F1->disparity(_imgL_cuda, _imgR_cuda, map, _imgcL, _imgcR, _log);
+		if (!F1->stereo_disparity(_imgL_cuda, _imgR_cuda, map, _imgcL, _imgcR, _log)) {
+			assert(false);
+			return;
+		}
 		map.optimize_map(2, false, false, true, opt_epochs, verbose_map, _log);
 		map.add_keyFramePair(F1);
 		return;
@@ -66,7 +69,7 @@ void StereoSLAM::process_frame_cuda(cv::cuda::GpuMat &_imgcL_cuda, cv::cuda::Gpu
 
 	// disparity map with SGM
 	now = high_resolution_clock::now();
-	F1->disparity(_imgL_cuda, _imgR_cuda, map, _imgcL, _imgcR, _log);
+	F1->stereo_disparity(_imgL_cuda, _imgR_cuda, map, _imgcL, _imgcR, _log);
 	diff = high_resolution_clock::now() - now;
 	mark_timing(diff);
 
@@ -167,7 +170,7 @@ void SLAM::process_frame(const cv::Mat &_imgc) {
 	cv::Mat _img;
 	//detect_obstacles(_img, f1, map);
 	cv::cvtColor(_imgc, _img, cv::COLOR_RGB2GRAY);	
-	FramePtr f1 = std::make_shared<Frame>(_img, map.K_inv, map);
+	FramePtr f1 = std::make_shared<Frame>(_img, map);
 	// initializing first frame
 	map.add_frame(f1);
 	if (f1->id() == 0) {
