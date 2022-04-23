@@ -36,9 +36,11 @@ class Map {
 		int SLIDING_WINDOW = 30;
 		bool STEREO = false;
 
-		int max_point;
-		int max_frame;
-		int max_framePair;
+		int _max_point = 0;
+		int _max_frame = 0;
+		int _max_framePair = 0;
+
+		Mat3d _K, _K_inv;
 
 	public:
 		cv::Ptr<cv::FeatureDetector> fdetector = cv::ORB::create(3000, 1.5f, 5, 31, 0);
@@ -58,12 +60,13 @@ class Map {
 		vec_FramePtr map_keyFrames;
 		vec_FramePairPtr map_keyFramePairs;
 
-		Eigen::Matrix3d K;
-		Eigen::Matrix3d K_inv;
+		Mat3d K() const {return _K;};
+		Mat3d K_inv() const {return _K_inv;};
 
 		Map() {};
-		Map(const Eigen::Matrix3d& _K, bool _st=false) {max_point=0; max_frame=0; max_framePair=0;K=_K;K_inv=_K.inverse();STEREO=_st;};
+		Map(const Eigen::Matrix3d& __K, bool _st=false) {_K=__K;_K_inv=__K.inverse();STEREO=_st;};
 		
+		int max_frame() {return _max_frame;};
 		void add_point(const PointPtr &);
 		void add_frame(const FramePtr &);
 		void add_framePair(const FramePairPtr &);

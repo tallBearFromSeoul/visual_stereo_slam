@@ -5,7 +5,7 @@
 #include <numeric>
 
 void Map::add_point(const PointPtr &_pt) {
-	_pt->set_id(max_point++);
+	_pt->set_id(_max_point++);
 	map_points.push_back(_pt);
 	if (map_points_ids.count(_pt->id())) {
 		assert(false);
@@ -14,12 +14,12 @@ void Map::add_point(const PointPtr &_pt) {
 }
 
 void Map::add_frame(const FramePtr &_f) {
-	_f->set_id(max_frame++);
+	_f->set_id(_max_frame++);
 	map_frames.push_back(_f);
 }
 
 void Map::add_framePair(const FramePairPtr &_F) {
-	_F->set_id(max_framePair++);
+	_F->set_id(_max_framePair++);
 	add_frame(_F->left);
 	add_frame(_F->right);
 	map_framePairs.push_back(_F);
@@ -84,7 +84,7 @@ void Map::cull(Log *_log) {
 	int culled_frames_count = 0;
 	for (vec_FramePtr::iterator it=map_frames.begin(); it!=map_frames.end(); ) {
 		FramePtr _f = *it;
-		if (_f->id()%2==0 && (_f->isEmpty() || _f->id()+VOLD<max_frame)) {
+		if (_f->id()%2==0 && (_f->isEmpty() || _f->id()+VOLD<_max_frame)) {
 			culled_frames_count++;
 			map_frames.erase(it);
 			if (STEREO) {

@@ -8,22 +8,24 @@
 #include <opencv2/cudaimgproc.hpp>
 
 void StereoSLAM::process_frame_cuda(cv::cuda::GpuMat &_imgcL_cuda, cv::cuda::GpuMat &_imgcR_cuda) {
-	time_point<high_resolution_clock> now;
+	time_point<high_resolution_clock> now = high_resolution_clock::now();
 	duration<double> diff;
-	now = high_resolution_clock::now();
 	
+	// obtaining cv::Mat from cv::cuda::GpuMat
 	cv::Mat _imgcL, _imgcR;
 	_imgcL_cuda.download(_imgcL);
 	_imgcR_cuda.download(_imgcR);
 
+	// converting to gray
 	cv::cuda::GpuMat _imgL_cuda, _imgR_cuda;
 	cv::cuda::cvtColor(_imgcL_cuda, _imgL_cuda, cv::COLOR_BGR2GRAY);	
 	cv::cuda::cvtColor(_imgcR_cuda, _imgR_cuda, cv::COLOR_BGR2GRAY);
 	diff = high_resolution_clock::now() - now;
 	mark_timing(diff);
 	now = high_resolution_clock::now();
-
-	FramePairPtr F1 = std::make_shared<FramePair>(_imgL_cuda, _imgR_cuda, map, _imgcL, _imgcR, module);
+	
+	//Initializing FramePairPtr
+	FramePairPtr F1 = std::make_shared<FramePair>(_imgL_cuda, _imgR_cuda, _imgcL, _imgcR, map, module);
 	map.add_framePair(F1);
 	if (F1->id() == 0) {
 		F1->setPoseIdentity();
@@ -75,18 +77,10 @@ void StereoSLAM::process_frame_cuda(cv::cuda::GpuMat &_imgcL_cuda, cv::cuda::Gpu
 
 	// global optimization [SLDING WINDOW : 20 framePairs]
 	now = high_resolution_clock::now();
-	/*
-	if (F1->left->id() >= global_opt_freq-1 && F1->left->id() % global_opt_freq == 0) {	
-		double global_opt_error = map.optimize_map(-1, true, false, false, opt_epochs, verbose_map, _log);
-		std::cout<<"Error from global optimization is "<<global_opt_error<<"\n";
-	}
-	*/
 	if (relTransNorm(F1, map.map_keyFramePairs.back()) > keyFrame_threshold) {
 		map.add_keyFramePair(F1);
 		double global_opt_error = map.optimize_map(-1, true, false, false, opt_epochs, verbose_map, _log);
 		std::cout<<"Error from global optimization is "<<global_opt_error<<"\n";
-		//double global_kf_opt_error = map.optimize_map(-1, true, true, false, opt_epochs, verbose_map, _log);
-		//std::cout<<"Error from global keyFrame optimization is : "<<global_kf_opt_error<<"\n";
 	}
 	mark_mapInfo(map.map_keyFrames.size(), map.map_keyFramePoints.size(), map.map_frames.size(), map.map_points.size());
 }

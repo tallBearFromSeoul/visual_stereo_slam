@@ -2,4 +2,9 @@
 *.pt
 *.cmake
 *.txt
+*.o
+*.d
+*.make
+*.swp
 !TODOLISTS.txt
+

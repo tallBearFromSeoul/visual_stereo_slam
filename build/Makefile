@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named vSlamStereo_exe
+# Target rules for targets named visualStereoSLAM.exe
 
 # Build rule for target.
-vSlamStereo_exe: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vSlamStereo_exe
-.PHONY : vSlamStereo_exe
+visualStereoSLAM.exe: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 visualStereoSLAM.exe
+.PHONY : visualStereoSLAM.exe
 
 # fast build rule for target.
-vSlamStereo_exe/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/build
-.PHONY : vSlamStereo_exe/fast
+visualStereoSLAM.exe/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/build
+.PHONY : visualStereoSLAM.exe/fast
 
 src/display.o: src/display.cpp.o
 .PHONY : src/display.o
 
 # target to build an object file
 src/display.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/display.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/display.cpp.o
 .PHONY : src/display.cpp.o
 
 src/display.i: src/display.cpp.i
@@ -142,7 +142,7 @@ src/display.i: src/display.cpp.i
 
 # target to preprocess a source file
 src/display.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/display.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/display.cpp.i
 .PHONY : src/display.cpp.i
 
 src/display.s: src/display.cpp.s
@@ -150,7 +150,7 @@ src/display.s: src/display.cpp.s
 
 # target to generate assembly for a file
 src/display.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/display.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/display.cpp.s
 .PHONY : src/display.cpp.s
 
 src/essentialMat.o: src/essentialMat.cpp.o
@@ -158,7 +158,7 @@ src/essentialMat.o: src/essentialMat.cpp.o
 
 # target to build an object file
 src/essentialMat.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/essentialMat.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/essentialMat.cpp.o
 .PHONY : src/essentialMat.cpp.o
 
 src/essentialMat.i: src/essentialMat.cpp.i
@@ -166,7 +166,7 @@ src/essentialMat.i: src/essentialMat.cpp.i
 
 # target to preprocess a source file
 src/essentialMat.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/essentialMat.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/essentialMat.cpp.i
 .PHONY : src/essentialMat.cpp.i
 
 src/essentialMat.s: src/essentialMat.cpp.s
@@ -174,7 +174,7 @@ src/essentialMat.s: src/essentialMat.cpp.s
 
 # target to generate assembly for a file
 src/essentialMat.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/essentialMat.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/essentialMat.cpp.s
 .PHONY : src/essentialMat.cpp.s
 
 src/frame.o: src/frame.cpp.o
@@ -182,7 +182,7 @@ src/frame.o: src/frame.cpp.o
 
 # target to build an object file
 src/frame.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/frame.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/frame.cpp.o
 .PHONY : src/frame.cpp.o
 
 src/frame.i: src/frame.cpp.i
@@ -190,7 +190,7 @@ src/frame.i: src/frame.cpp.i
 
 # target to preprocess a source file
 src/frame.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/frame.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/frame.cpp.i
 .PHONY : src/frame.cpp.i
 
 src/frame.s: src/frame.cpp.s
@@ -198,7 +198,7 @@ src/frame.s: src/frame.cpp.s
 
 # target to generate assembly for a file
 src/frame.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/frame.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/frame.cpp.s
 .PHONY : src/frame.cpp.s
 
 src/kdTree.o: src/kdTree.cpp.o
@@ -206,7 +206,7 @@ src/kdTree.o: src/kdTree.cpp.o
 
 # target to build an object file
 src/kdTree.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/kdTree.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/kdTree.cpp.o
 .PHONY : src/kdTree.cpp.o
 
 src/kdTree.i: src/kdTree.cpp.i
@@ -214,7 +214,7 @@ src/kdTree.i: src/kdTree.cpp.i
 
 # target to preprocess a source file
 src/kdTree.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/kdTree.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/kdTree.cpp.i
 .PHONY : src/kdTree.cpp.i
 
 src/kdTree.s: src/kdTree.cpp.s
@@ -222,7 +222,7 @@ src/kdTree.s: src/kdTree.cpp.s
 
 # target to generate assembly for a file
 src/kdTree.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/kdTree.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/kdTree.cpp.s
 .PHONY : src/kdTree.cpp.s
 
 src/log.o: src/log.cpp.o
@@ -230,7 +230,7 @@ src/log.o: src/log.cpp.o
 
 # target to build an object file
 src/log.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/log.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/log.cpp.o
 .PHONY : src/log.cpp.o
 
 src/log.i: src/log.cpp.i
@@ -238,7 +238,7 @@ src/log.i: src/log.cpp.i
 
 # target to preprocess a source file
 src/log.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/log.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/log.cpp.i
 .PHONY : src/log.cpp.i
 
 src/log.s: src/log.cpp.s
@@ -246,7 +246,7 @@ src/log.s: src/log.cpp.s
 
 # target to generate assembly for a file
 src/log.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/log.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/log.cpp.s
 .PHONY : src/log.cpp.s
 
 src/main.o: src/main.cpp.o
@@ -254,7 +254,7 @@ src/main.o: src/main.cpp.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -262,7 +262,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -270,7 +270,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 src/map.o: src/map.cpp.o
@@ -278,7 +278,7 @@ src/map.o: src/map.cpp.o
 
 # target to build an object file
 src/map.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/map.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/map.cpp.o
 .PHONY : src/map.cpp.o
 
 src/map.i: src/map.cpp.i
@@ -286,7 +286,7 @@ src/map.i: src/map.cpp.i
 
 # target to preprocess a source file
 src/map.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/map.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/map.cpp.i
 .PHONY : src/map.cpp.i
 
 src/map.s: src/map.cpp.s
@@ -294,7 +294,7 @@ src/map.s: src/map.cpp.s
 
 # target to generate assembly for a file
 src/map.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/map.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/map.cpp.s
 .PHONY : src/map.cpp.s
 
 src/point.o: src/point.cpp.o
@@ -302,7 +302,7 @@ src/point.o: src/point.cpp.o
 
 # target to build an object file
 src/point.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/point.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/point.cpp.o
 .PHONY : src/point.cpp.o
 
 src/point.i: src/point.cpp.i
@@ -310,7 +310,7 @@ src/point.i: src/point.cpp.i
 
 # target to preprocess a source file
 src/point.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/point.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/point.cpp.i
 .PHONY : src/point.cpp.i
 
 src/point.s: src/point.cpp.s
@@ -318,7 +318,7 @@ src/point.s: src/point.cpp.s
 
 # target to generate assembly for a file
 src/point.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/point.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/point.cpp.s
 .PHONY : src/point.cpp.s
 
 src/slam.o: src/slam.cpp.o
@@ -326,7 +326,7 @@ src/slam.o: src/slam.cpp.o
 
 # target to build an object file
 src/slam.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/slam.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/slam.cpp.o
 .PHONY : src/slam.cpp.o
 
 src/slam.i: src/slam.cpp.i
@@ -334,7 +334,7 @@ src/slam.i: src/slam.cpp.i
 
 # target to preprocess a source file
 src/slam.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/slam.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/slam.cpp.i
 .PHONY : src/slam.cpp.i
 
 src/slam.s: src/slam.cpp.s
@@ -342,7 +342,7 @@ src/slam.s: src/slam.cpp.s
 
 # target to generate assembly for a file
 src/slam.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/vSlamStereo_exe.dir/build.make CMakeFiles/vSlamStereo_exe.dir/src/slam.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/visualStereoSLAM.exe.dir/build.make CMakeFiles/visualStereoSLAM.exe.dir/src/slam.cpp.s
 .PHONY : src/slam.cpp.s
 
 # Help Target
@@ -353,7 +353,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... vSlamStereo_exe"
+	@echo "... visualStereoSLAM.exe"
 	@echo "... src/display.o"
 	@echo "... src/display.i"
 	@echo "... src/display.s"

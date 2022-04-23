@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(vSlamStereo)
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 17)
-set(EXE_NAME vSlamStereo_exe.exe)
+set(EXE_NAME visualStereoSLAM.exe)
 set(EXECUTABLE_OUTPUT_PATH "../")
 set(SOURCES
 	./src/point.cpp

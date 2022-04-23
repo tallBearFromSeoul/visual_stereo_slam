@@ -12,7 +12,7 @@ using namespace torch::indexing;
 
 bool FramePair::stereo_disparity(const cv::cuda::GpuMat &_imgL, const cv::cuda::GpuMat &_imgR, Map &_map, const cv::Mat &_imgcL, const cv::Mat &_imgcR, Log *_log) {
 	disparity(_imgL, _imgR, _map, _imgcL, _imgcR, _log);
-	if (obstacles_depth_est(_map.K)) {
+	if (obstacles_depth_est(_map.K())) {
 		return true;
 	} else {
 		return false;
@@ -52,21 +52,22 @@ bool FramePair::obstacles_depth_est(const Mat3d &_K) {
 		obsR_ptr = right->obstacles(idxR);
 		depth_estimate(obsL_ptr, left, _K, left->getPose());
 		depth_estimate(obsR_ptr, right, _K, right->getPose());
+		//if (
 		_corr_m_obs.push_back(0.5f*(obsL_ptr->depth3d() + obsR_ptr->depth3d()));
 	}
 	return true;
 }
 
 bool FramePair::match_obstacles() {
-	for (size_t i=0; i<left->obstacles_count(); i++) {
+	for (int i=0; i<left->obstacles_count(); i++) {
 		std::priority_queue<std::vector<float>, std::vector<std::vector<float>>, std::greater<std::vector<float>>> temp;
-		for (size_t j=0; j<right->obstacles_count(); j++) {
+		for (int j=0; j<right->obstacles_count(); j++) {
 			if (left->obstacles(i)->class_id() != 2)
 				continue;
 			if (left->obstacles(i)->class_id() != right->obstacles(j)->class_id())
 				continue;
 			float val = left->obstacles(i)->compare(right->obstacles(j));
-			std::vector<float> vals = {val, i, j, left->obstacles(i)->class_id()};
+			std::vector<float> vals = {val, float(i), float(j), float(left->obstacles(i)->class_id())};
 			temp.push(vals);
 		}
 		if (temp.size())
@@ -136,7 +137,7 @@ void FramePair::detect_obstacles(const FramePtr &_f, const std::vector<torch::ji
 	}
 }
 
-FramePair::FramePair(const cv::cuda::GpuMat &_imgL_cuda, const cv::cuda::GpuMat &_imgR_cuda, const Map &_map, const cv::Mat &_imgcL, const cv::Mat &_imgcR, torch::jit::script::Module &_module) {
+FramePair::FramePair(const cv::cuda::GpuMat &_imgL_cuda, const cv::cuda::GpuMat &_imgR_cuda, const cv::Mat &_imgcL, const cv::Mat &_imgcR, const Map &_map, torch::jit::script::Module &_module) {
 	left = std::make_shared<Frame>(_imgL_cuda, _imgcL, _map);
 	right = std::make_shared<Frame>(_imgR_cuda, _imgcR, _map);
 	cv::Mat imgcL_float, imgcR_float, maskL, maskR;
@@ -152,8 +153,8 @@ FramePair::FramePair(const cv::cuda::GpuMat &_imgL_cuda, const cv::cuda::GpuMat 
 	std::vector<torch::jit::IValue> inL, inR;
 	inL = {imgsL, float(imgcL_float.rows), float(imgcR_float.cols)};
 	inR = {imgsR, float(imgcL_float.rows), float(imgcR_float.cols)};
-	detect_obstacles(left, inL, _module, _map.K, left->getPose(), maskL, _imgcL);
-	detect_obstacles(right, inR, _module, _map.K, right->getPose(), maskR, _imgcR);
+	detect_obstacles(left, inL, _module, _map.K(), left->getPose(), maskL, _imgcL);
+	detect_obstacles(right, inR, _module, _map.K(), right->getPose(), maskR, _imgcR);
 	lr = {left, right};
 	_sgm_cuda = _map.sgm_cuda;
 	
@@ -174,7 +175,7 @@ Frame::Frame(const cv::cuda::GpuMat &_img_cuda, const cv::Mat &_img, const Map &
 	_fmatcher = _map.fmatcher;
 	//_fmatcher_cuda = (_map.fmatcher_cuda);
 	extract_features(_img);
-	normalize_kps(_map.K_inv);
+	normalize_kps(_map.K_inv());
 	//tree = kdTree();
 }
 
@@ -202,7 +203,7 @@ void FramePair::disparity(const cv::cuda::GpuMat &_imgL, const cv::cuda::GpuMat 
 		for (size_t idx=0; idx<=_f->kps().size()-1; idx++) {
 			cv::KeyPoint _kp = _f->kps()[idx];
 			Vec3d rel_depth;
-			if (!stereoDepth(_kp, _map.K, rel_depth))
+			if (!stereoDepth(_kp, _map.K(), rel_depth))
 				continue;
 			Vec4d rel_depth_homo;
 			rel_depth_homo << rel_depth, 1.0;
@@ -233,7 +234,7 @@ Frame::Frame(const cv::Mat &_img, const Map &_map) {
 	_fmatcher = _map.fmatcher;
 
 	extract_features(_img);
-	normalize_kps(_map.K_inv);
+	normalize_kps(_map.K_inv());
 	//tree = kdTree();
 }
 
@@ -385,7 +386,7 @@ void FramePair::disparity(const cv::Mat &_imgL, const cv::Mat &_imgR, Map &_map,
 		for (size_t idx=0; idx<=_f->kps().size()-1; idx++) {
 			cv::KeyPoint _kp = _f->kps()[idx];
 			Vec3d rel_depth;
-			if (!stereoDepth(_kp, _map.K, rel_depth))
+			if (!stereoDepth(_kp, _map.K(), rel_depth))
 				continue;
 			Vec4d rel_depth_homo;
 			rel_depth_homo << rel_depth, 1.0;

@@ -43,10 +43,10 @@ class Obs {
 	private:
 		int _class_id = -1;
 		//cv::Rect_<float> _bbox;
-		float _area = -1.0f;
+		float _area;
 		Vec2f _w_h;
 		Vec2f _center;
-		Vec3f _depth3d;
+		Vec3f _depth3d = Vec3f::Zero();
 	public:
 		Obs(int __class_id, const Vec2f &__w_h, const Vec2f &__center) : _class_id(__class_id), _w_h(__w_h), _center(__center) {};
 		//Obs(int __class_id, float __area, Vec2f __center) : _class_id(__class_id), _area(__area), _center(__center) {};
@@ -162,7 +162,7 @@ class FramePair {
 		
 		FramePair(const cv::Mat &, const cv::Mat &, const Map &);
 		FramePair(const cv::cuda::GpuMat &, const cv::cuda::GpuMat &, const Map &);
-		FramePair(const cv::cuda::GpuMat &, const cv::cuda::GpuMat &, const Map &, const cv::Mat &, const cv::Mat &, torch::jit::script::Module &);
+		FramePair(const cv::cuda::GpuMat &, const cv::cuda::GpuMat &, const cv::Mat &, const cv::Mat &, const Map &, torch::jit::script::Module &);
 
 		std::vector<std::priority_queue<std::vector<float>, std::vector<std::vector<float>>, std::greater<std::vector<float>>>> matches() {return _matches;};
 		std::vector<Vec3f> corr_m_obs() {return _corr_m_obs;};
