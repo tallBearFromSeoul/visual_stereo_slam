@@ -13,11 +13,18 @@ I wrote a C++ application of visual Simultaneous Localization And Mapping (SLAM)
 Main libraries used : Eigen 3.3, g2o 1.0.0, OpenCV 4.5.5, LibTorch 1.10.0, CUDA 11.3, Pangolin 0.7
 
 # Overview:
-1. Introduction : A brief description of the flow of the application.
-2. Few demonstration purpose images and videos for visualization of the functionalities.
+1. Demonstration video with key functionalities 
+2. A brief description of the flow of the application
 3. Prerequisites required to build and dependencies for building.
 
-## Introduction : A brief description of the flow of the application.
+## Demonstration video with key functionalities
+ ##### Visual Stereo Slam Demonstration Video
+ ![visual_stereo_slam_demo](https://user-images.githubusercontent.com/97034587/165011639-47ab732a-99b3-40d4-b44e-8a2351bf89d4.gif)
+ 
+ Full video of the above .gif file is at the link below :
+       https://youtu.be/8iTiYWXvHkA
+
+## A brief description of the flow of the application.
  ###### Functionality
    The main purpose of the application is to create a global map of the scene inputted from a series of images or a video of a driving scene while detecting pedestrians and vehicles observed from the camera. The application creates a 3D scene reconstructed from the input source composed of all frames’ pose, the points observed from each frame, and obstacles’ location. There are three functions to this application: - SLAM, -GPU_SLAM, GPU_STEREO_SLAM. The description below will be by default based on GPU_STEREO_SLAM. When using object detection module, the inference time is approximately around 8~9 seconds then delivers a stable speed of 0.19 sec per frame pair.
   ##### DETR
@@ -44,13 +51,25 @@ Main libraries used : Eigen 3.3, g2o 1.0.0, OpenCV 4.5.5, LibTorch 1.10.0, CUDA 
    A frame pair becomes a key frame pair once it is outside the threshold boundary of the previous keyframe pair. And the key frames are highlighted relative to normal frames as shown below in Figure 2.
   ##### Rendering
   After the process_frames_cuda() method, draw_map() method is called in Display() class. The rendering is based on OpenGL and Pangolin, which renders all the frames as either dark red pyramids for default frame pair, or bright red and green each for keyframe pair. The frames are rendered as square pyramids, where the square vertex represents the origin and the vector from the origin to square’s center is the direction where the camera’s pointed at. The points are rendered with the original pixel value from the image. 
-##### [Figure 1.](/samples/img_1.png)
-    Concentric circle current location
-##### [Figure 2.](/samples/img_2.png)
-##### [Figure 3.](/samples/img_3.png)
+##### [Figure 1.0]
+<img src=samples/img_1_0.png width="200" height="200" />
+
+     Cyan concentric circle representing the latest frame pair's location.
+##### [Figure 1.1]
+<img src=samples/img_1_1.png width="200" height="200" />
+
+      White concentric circle representing the location of matched and corrected obstacle. 
+##### [Figure 2.]
+<img src=samples/img_2.png width="150" height="150" />
+
     (UP) Default frame pair (DOWN) Keyframe pair
     Both looked from above, thus the projected side looks like a triangle.
 The amount of points added from triangulation of inlier keypoints takes up about 80% of new points, stereo disparity and add from previous frame pair both shares 10% most of the time.
 
-##### VIDEO(LINK)
+## Prerequisites required to build and dependencies for building.
+Cmake minimum 3.0
+C++17 used 
+tested in Ubuntu Linux 18.04.06 LTS, NVIDIA GeForce RTX 3090, AMD Ryzen 5800X, 16Gb RAM.
+Dependencies : 
+``Eigen 3.3, g2o 1.0.0, OpenCV 4.5.5, LibTorch 1.10.0, CUDA 11.3, Pangolin 0.7``
 
