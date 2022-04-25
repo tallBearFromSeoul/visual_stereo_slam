@@ -12,6 +12,9 @@ limitations under the License.
 I wrote a C++ application of visual Simultaneous Localization And Mapping (SLAM) with obstacle detection neural net trained myself with a custom dataset using LibTorch under the inspiration from Tesla Autopilot.
 Main libraries used : Eigen 3.3, g2o 1.0.0, OpenCV 4.5.5, LibTorch 1.10.0, CUDA 11.3, Pangolin 0.7
 
+## My profile
+https://www.linkedin.com/in/gunn-lee/
+
 # Overview:
 1. Demonstration video with key functionalities 
 2. A brief description of the flow of the application
