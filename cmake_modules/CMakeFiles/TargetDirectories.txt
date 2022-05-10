@@ -1,3 +1,0 @@
-/home/gunny7828/Mar04_vSlam/cmake_modules/CMakeFiles/g2o_test.dir
-/home/gunny7828/Mar04_vSlam/cmake_modules/CMakeFiles/edit_cache.dir
-/home/gunny7828/Mar04_vSlam/cmake_modules/CMakeFiles/rebuild_cache.dir
